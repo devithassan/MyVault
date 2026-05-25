@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@import "./variables.css";
+@import "./animations.css";
+@import "./utilities.css";
+/* @import "./globals.css" */
+/* GLOBAL APP STYLES */
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+
+  background: var(--color-bg);
+  color: var(--color-text);
+
+  overflow-x: hidden;
+
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}

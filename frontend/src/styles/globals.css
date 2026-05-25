@@ -1,0 +1,152 @@
+/* styles/globals.css */
+
+/* =========================================
+   RESET
+========================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* =========================================
+   ROOT
+========================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+} */
+
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font-family-base);
+
+  background-color: var(--color-background);
+  color: var(--color-text);
+
+  line-height: var(--line-height-normal);
+
+  overflow-x: hidden;
+
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+/* =========================================
+   BODY (CORE THEME ENTRY POINT)
+========================================= */
+
+/* body {
+  font-family: var(--font-family-base);
+
+  background-color: var(--color-background);
+  color: var(--color-text);
+
+  line-height: var(--line-height-normal);
+
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+
+  overflow-x: hidden;
+} */
+
+/* =========================================
+   MEDIA
+========================================= */
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* =========================================
+   FORMS
+========================================= */
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+/* =========================================
+   LINKS
+========================================= */
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* =========================================
+   LISTS
+========================================= */
+
+ul,
+ol {
+  list-style: none;
+}
+
+/* =========================================
+   SCROLLBAR (OPTIONAL UI POLISH)
+========================================= */
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+}
+
+/* =========================================
+   TEXT SELECTION
+========================================= */
+
+::selection {
+  background: var(--color-primary);
+  color: white;
+}
+
+/* =========================================
+   Layout
+========================================= */
+
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+}

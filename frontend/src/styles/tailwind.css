@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+/* Disable Tailwind reset */
+@layer theme, base, components, utilities;
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    all: unset;
+    display: revert;
+  }
+}
