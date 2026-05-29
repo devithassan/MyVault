@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { View, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
-import { useAuthStore } from "@/store/auth.store";
+import { useAuthStore } from "@/src/store/auth.store";
 
 export default function Index() {
   const router = useRouter();
