@@ -11,6 +11,16 @@ import {
   registerUser,
 } from "./auth.service";
 
+import {
+  verifyEmailSchema,
+} from "./auth.schema";
+
+import {
+  verifyEmail,
+} from "./auth.service";
+
+
+
 export async function registerController(
   request: FastifyRequest,
   reply: FastifyReply
@@ -38,6 +48,35 @@ export async function registerController(
       success: false,
       message:
         error.message || "Registration failed",
+    });
+  }
+}
+
+export async function verifyEmailController(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  try {
+    const { token } =
+      verifyEmailSchema.parse(
+        request.body
+      );
+
+    const result =
+      await verifyEmail(token);
+
+    return reply.send({
+      success: true,
+      message:
+        "Email verified successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    return reply.status(400).send({
+      success: false,
+      message:
+        error.message ||
+        "Verification failed",
     });
   }
 }

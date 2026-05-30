@@ -74,3 +74,43 @@ export async function registerUser(
     email: user.email,
   };
 }
+
+export async function verifyEmail(
+  token: string
+) {
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(token)
+    .digest("hex");
+
+  const user = await User.findOne({
+    verificationToken: hashedToken,
+  });
+
+  if (!user) {
+    throw new Error(
+      "Invalid verification token"
+    );
+  }
+
+  if (
+    !user.verificationTokenExpiresAt ||
+    user.verificationTokenExpiresAt <
+      new Date()
+  ) {
+    throw new Error(
+      "Verification token expired"
+    );
+  }
+
+  user.emailVerified = true;
+
+  user.verificationToken = null;
+  user.verificationTokenExpiresAt = null;
+
+  await user.save();
+
+  return {
+    email: user.email,
+  };
+}
