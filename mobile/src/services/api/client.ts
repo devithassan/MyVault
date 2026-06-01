@@ -1,7 +1,9 @@
+// src/services/api/client.ts
+
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
-const API_URL = "http://localhost:5000/api"; // later replace with prod URL
+const API_URL = "http://192.168.100.17:5000/api"; // later replace with prod URL
 
 export const api = axios.create({
   baseURL: API_URL,

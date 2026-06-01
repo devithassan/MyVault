@@ -11,10 +11,5 @@ build
 # logs
 *.log
 
-
-# Environment files
-backend/.env
-backend/.env.*
-
-.env
-.env.*
+.claude
+.vscode

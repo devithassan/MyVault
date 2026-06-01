@@ -14,10 +14,13 @@ export default function RegisterForm() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setError("");
 
     try {
       setLoading(true);
@@ -31,7 +34,20 @@ export default function RegisterForm() {
 
       navigate("/register/success");
     } catch (error) {
-      console.log(error.response?.data || error.message);
+      // console.log(error.response?.data || error.message);
+        const message = error.response?.data?.message;
+      if (
+        message === "Email already in use"
+      ){
+        setError("Email already in use");
+      }
+      else{
+        setError(
+          message ||
+          error.message ||
+          "Something went wrong"
+        );
+      } 
     } finally {
       setLoading(false);
     }
@@ -113,6 +129,13 @@ export default function RegisterForm() {
             placeholder="Confirm your password"
           />
         </div> */}
+
+        {/* Error Message */}
+        {error && (
+          <div className="text-sm text-red-700">
+            {error}
+          </div>
+        )}
 
         {/* CTA */}
         <Button type = "submit" className="w-full h-12 rounded-xl">

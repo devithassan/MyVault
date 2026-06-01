@@ -1,3 +1,5 @@
+// src/modules/auth/auth.routes.ts
+
 import { FastifyInstance } from "fastify";
 
 import {
@@ -7,6 +9,18 @@ import {
 import {
   verifyEmailController,
 } from "./auth.controller";
+
+import { createPasswordController,
+} from "./auth.controller";
+
+import { onboardingStatusController,
+} from "./auth.controller";
+
+import {
+  loginController,
+} from "./auth.controller";
+
+
 
 async function authRoutes(app: FastifyInstance) {
 
@@ -21,6 +35,25 @@ async function authRoutes(app: FastifyInstance) {
     "/verify-email",
     verifyEmailController
   );
+
+  // Create Password
+  app.post(
+    "/create-password",
+    createPasswordController
+  );
+
+  // Login
+  app.post(
+    "/login",
+    loginController
+  );
+
+  // Get Onboarding Status
+  app.post(
+    "/onboarding-status",
+    onboardingStatusController
+  );
+  
 
 }
 

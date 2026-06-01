@@ -19,6 +19,30 @@ import {
   verifyEmail,
 } from "./auth.service";
 
+import {
+  createPasswordSchema,
+} from "./auth.schema";
+
+import {
+  createPassword,
+} from "./auth.service";
+
+import {
+  onboardingStatusSchema,
+} from "./auth.schema";
+
+import {
+  getOnboardingStatus,
+} from "./auth.service";
+
+import {
+  loginSchema,
+} from "./auth.schema";
+
+import {
+  loginUser,
+} from "./auth.service";
+
 
 
 export async function registerController(
@@ -72,6 +96,14 @@ export async function verifyEmailController(
       data: result,
     });
   } catch (error: any) {
+    if (error.message === "INVALID_OR_ALREADY_USED_TOKEN") {
+      return reply.status(400).send({
+        success: false,
+        code: "ALREADY_VERIFIED",
+        message:
+          "Email is already verified",
+      });
+    }
     return reply.status(400).send({
       success: false,
       message:
@@ -80,3 +112,92 @@ export async function verifyEmailController(
     });
   }
 }
+
+export async function createPasswordController(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  try {
+    const validatedData =
+      createPasswordSchema.parse(
+        request.body
+      );
+
+    const result =
+      await createPassword(
+        validatedData
+      );
+
+    return reply.send({
+      success: true,
+      message:
+        "Password created successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    return reply.status(400).send({
+      success: false,
+      message:
+        error.message,
+    });
+  }
+}
+
+export async function onboardingStatusController(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  try {
+    const validatedData =
+      onboardingStatusSchema.parse(
+        request.body
+      );
+
+    const result =
+      await getOnboardingStatus(
+        validatedData
+      );
+
+    return reply.send({
+      success: true,
+      data: result,
+    });
+  } catch (error: any) {
+    return reply.status(400).send({
+      success: false,
+      message:
+        error.message ||
+        "Unable to determine onboarding status",
+    });
+  }
+}
+
+export async function loginController(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  try {
+    const validatedData =
+      loginSchema.parse(
+        request.body
+      );
+
+    const result =
+      await loginUser(
+        validatedData
+      );
+
+    return reply.send({
+      success: true,
+      data: result,
+    });
+  } catch (error: any) {
+    return reply.status(400).send({
+      success: false,
+      message:
+        error.message ||
+        "Login failed",
+    });
+  }
+}
+

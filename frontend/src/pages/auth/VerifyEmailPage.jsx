@@ -1,5 +1,8 @@
 // pages/auth/VerifyEmailPage.jsx
 
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+
 import { ShieldCheck, Smartphone } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -7,6 +10,52 @@ import AuthLayout from "@/components/auth/AuthLayout";
 import { Button } from "@/components/ui";
 
 export default function VerifyEmailPage() {
+
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token");
+
+  const [status, setStatus] = useState("loading");
+  // loading | success | error
+
+  useEffect(() => {
+    const verifyEmail = async () => {
+      if (!token) {
+        setStatus("error");
+        return;
+      }
+
+      try {
+        const res = await fetch(
+          "http://localhost:5000/api/auth/verify-email",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token }),
+          }
+        );
+
+        const data = await res.json();
+
+        if (data.success) {
+          setStatus("success");
+        }
+        else if (
+          data.code === "ALREADY_VERIFIED"
+        ) {
+          setStatus("alreadyVerified");
+        }
+        else {
+          setStatus("error");
+        }
+      } catch (err) {
+        setStatus("error");
+      }
+    };
+
+    verifyEmail();
+  }, [token]);
   return (
     <AuthLayout
       leftContent={
@@ -117,6 +166,18 @@ export default function VerifyEmailPage() {
             space-y-8
           "
         >
+        {status === "loading" && (
+          <div className="space-y-3">
+            <h2 className="text-2xl font-semibold">
+              Verifying your email...
+            </h2>
+            <p className="text-muted-foreground">
+              Please wait while we confirm your identity.
+            </p>
+          </div>
+        )}  
+        {status === "success" && (
+          <>
           <div className="space-y-3">
             <h2 className="text-2xl font-semibold tracking-tight">
               Email verified successfully
@@ -142,7 +203,49 @@ export default function VerifyEmailPage() {
               </Button>
             </Link>
           </div>
+          </>
+        )}
 
+        {status === "alreadyVerified" && (
+          <>
+            <div className="space-y-3">
+              <h2 className="text-2xl font-semibold">
+                Email already verified
+              </h2>
+
+              <p className="text-muted-foreground">
+                Continue setup in the Vault mobile app.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <Button className="w-full h-12 rounded-xl">
+                Open Vault App
+              </Button>
+
+              <Link to="/download">
+                <Button
+                  variant="secondary"
+                  className="w-full h-12 rounded-xl"
+                >
+                  Download Mobile App
+                </Button>
+              </Link>
+            </div>
+          </>
+        )}
+
+        {status === "error" && (
+          <div className="space-y-3">
+            <h2 className="text-2xl font-semibold text-red-500">
+              Verification failed
+            </h2>
+
+            <p className="text-muted-foreground">
+              The link is invalid or expired. Please request a new email.
+            </p>
+          </div>
+        )}
           <div className="pt-6 border-t">
             <p className="text-sm text-muted-foreground leading-relaxed">
               Browser-based vault access is intentionally disabled
