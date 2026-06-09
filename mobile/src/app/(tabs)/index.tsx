@@ -1,11 +1,15 @@
 // src/app/(tabs)/index.tsx
 
+import { useAuthStore } from "@/features/auth/auth.store";
 import { useRouter } from "expo-router";
 import { Button, View } from "react-native";
 
 export default function Home() {
   const router = useRouter();
   console.log("HOME SCREEN RENDERED");
+  const logout = useAuthStore(
+  (s) => s.logout
+);
   
   return (
     <View
@@ -35,6 +39,26 @@ export default function Home() {
         onPress={() => {
           console.log("GO LOGIN");
           router.push("/auth/login");
+        }}
+      />
+
+      {/* <Button
+        title="Logout"
+        onPress={async () => {
+          await logout();
+
+          router.replace("/auth");
+
+          console.log("LOGGED OUT");
+        }}
+      /> */}
+
+      <Button
+        title="Logout"
+        onPress={async () => {
+          await logout();
+
+          router.replace("/auth");
         }}
       />
     </View>

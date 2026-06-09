@@ -1,7 +1,12 @@
 // src/app/_layout.tsx (root layout for the app)
 
+
 import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
-import { Stack } from "expo-router";
+import {
+  Stack,
+  useRouter,
+  useSegments,
+} from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
@@ -12,47 +17,193 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 export default function RootLayout() {
   const colorScheme = useColorScheme();
 
-  const { hydrateAuth } = useAuthStore();
+  const router = useRouter();
+  const segments = useSegments();
+
+  const {
+    user,
+    hydrated,
+    hydrateAuth,
+  } = useAuthStore();
+
   useEffect(() => {
     hydrateAuth();
   }, []);
-  // const router = useRouter();
-  // const segments = useSegments();
 
-  // const { user, hydrated, hydrateAuth } = useAuthStore();
-  
+  useEffect(() => {
+    if (!hydrated) return;
 
-  // // Load token on app start
-  // useEffect(() => {
-  //   hydrateAuth();
-  // }, []);
+    const inAuthGroup =
+      segments[0] === "auth";
 
-  // // Auth routing guard
-  // useEffect(() => {
-  //   if (!hydrated) return;
+    if (!user && !inAuthGroup) {
+      router.replace("/auth");
+      return;
+    }
 
-  //   const segment0 = segments[0];
-  //   const inAuthGroup = segment0 === "auth";
+    if (user && inAuthGroup) {
+      router.replace("/(tabs)");
+      return;
+    }
+  }, [user, hydrated, segments]);
 
-
-  //   if (!user && !inAuthGroup) {
-  //     router.replace("/auth");
-  //     return;
-  //   }
-
-  //   if (user && inAuthGroup) {
-  //     router.replace("/(tabs)");
-  //     return;
-  //   }
-  // }, [user, hydrated, segments]);
+  if (!hydrated) {
+    return null;
+  }
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{ headerShown: false }} />
+    <ThemeProvider
+      value={
+        colorScheme === "dark"
+          ? DarkTheme
+          : DefaultTheme
+      }
+    >
+      <Stack
+        screenOptions={{
+          headerShown: false,
+        }}
+      />
       <StatusBar style="auto" />
     </ThemeProvider>
   );
 }
+
+// import {
+//   DarkTheme,
+//   DefaultTheme,
+//   ThemeProvider,
+// } from "@react-navigation/native";
+
+// import {
+//   Stack,
+//   useRouter,
+//   useSegments,
+// } from "expo-router";
+
+// import { StatusBar } from "expo-status-bar";
+// import { useEffect } from "react";
+// import "react-native-reanimated";
+
+// import { useAuthStore } from "@/features/auth/auth.store";
+// import { useColorScheme } from "@/hooks/use-color-scheme";
+
+// export default function RootLayout() {
+//   const colorScheme =
+//     useColorScheme();
+
+//   const router = useRouter();
+//   const segments = useSegments();
+
+//   const {
+//     user,
+//     hydrated,
+//     hydrateAuth,
+//   } = useAuthStore();
+
+//   // Restore session on app start
+//   useEffect(() => {
+//     hydrateAuth();
+//   }, []);
+
+//   // Route guard
+//   useEffect(() => {
+//     if (!hydrated) {
+//       return;
+//     }
+
+//     const inAuthGroup =
+//       segments[0] === "auth";
+
+//     // Not logged in
+//     if (!user && !inAuthGroup) {
+//       router.replace("/auth");
+//       return;
+//     }
+
+//     // Logged in
+//     if (user && inAuthGroup) {
+//       router.replace("/(tabs)");
+//       return;
+//     }
+//   }, [
+//     user,
+//     hydrated,
+//     segments,
+//   ]);
+
+//   return (
+//     <ThemeProvider
+//       value={
+//         colorScheme === "dark"
+//           ? DarkTheme
+//           : DefaultTheme
+//       }
+//     >
+//       <Stack
+//         screenOptions={{
+//           headerShown: false,
+//         }}
+//       />
+
+//       <StatusBar style="auto" />
+//     </ThemeProvider>
+//   );
+// }
+
+// import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
+// import { Stack } from "expo-router";
+// import { StatusBar } from "expo-status-bar";
+// import { useEffect } from "react";
+// import "react-native-reanimated";
+
+// import { useAuthStore } from "@/features/auth/auth.store";
+// import { useColorScheme } from "@/hooks/use-color-scheme";
+
+// export default function RootLayout() {
+//   const colorScheme = useColorScheme();
+
+//   const { hydrateAuth } = useAuthStore();
+//   useEffect(() => {
+//     hydrateAuth();
+//   }, []);
+//   // const router = useRouter();
+//   // const segments = useSegments();
+
+//   // const { user, hydrated, hydrateAuth } = useAuthStore();
+  
+
+//   // // Load token on app start
+//   // useEffect(() => {
+//   //   hydrateAuth();
+//   // }, []);
+
+//   // // Auth routing guard
+//   // useEffect(() => {
+//   //   if (!hydrated) return;
+
+//   //   const segment0 = segments[0];
+//   //   const inAuthGroup = segment0 === "auth";
+
+
+//   //   if (!user && !inAuthGroup) {
+//   //     router.replace("/auth");
+//   //     return;
+//   //   }
+
+//   //   if (user && inAuthGroup) {
+//   //     router.replace("/(tabs)");
+//   //     return;
+//   //   }
+//   // }, [user, hydrated, segments]);
+
+//   return (
+//     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+//       <Stack screenOptions={{ headerShown: false }} />
+//       <StatusBar style="auto" />
+//     </ThemeProvider>
+//   );
+// }
 
 
 

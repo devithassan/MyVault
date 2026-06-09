@@ -30,6 +30,11 @@ export default function LoginScreen() {
 
       const res = await authService.login(email.trim(), password);
 
+      // console.log(
+      //   "ACCESS TOKEN:",
+      //   res.accessToken
+      // );
+
       console.log("LOGIN RESPONSE:", res);
 
       if (!res?.success) {
@@ -63,9 +68,25 @@ export default function LoginScreen() {
       //   token,
       //   email: res?.data?.data?.user?.email,
       // });
+
+      // testing level
+      // setUser({
+      //   token: accessToken,
+      //   email: user.email,
+      // });
+
+      // procuction level
+      // setUser({
+      //   id: res.user.id,
+      //   email: res.user.email,
+      //   fullName: res.user.fullName,
+      //   // token,
+      // });
+        // OR below
       setUser({
-        token: accessToken,
+        id: user.id,
         email: user.email,
+        fullName: user.fullName,
       });
 
       router.replace("/(tabs)");

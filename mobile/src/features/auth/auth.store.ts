@@ -1,6 +1,7 @@
 // src/features/auth/auth.store.ts
 
 import { getOnboardingStatus } from "@/features/auth/auth.service";
+import { getMe } from "@/features/user/user.service";
 import * as SecureStore from "expo-secure-store";
 import { create } from "zustand";
 
@@ -9,10 +10,17 @@ type OnboardingStatus =
   | "CREATE_PASSWORD"
   | "LOGIN";
 
-type User = {
+
+// type User = {            // testing level. after login store! this is for temp testing auth 
+//   email: string;
+//   token: string;
+// };
+
+type User = {          // production level. loading actual user profile
+  id: string;
   email: string;
-  token: string;
-};
+  fullName: string;
+}
 
 type AuthState = {
   email: string;
@@ -47,22 +55,65 @@ export const useAuthStore = create<AuthState>((set) => ({
     return res;
   },
 
-  //Load token on app start
-  hydrateAuth: async () => {
-    try{
-      const token = await SecureStore.getItemAsync("accessToken");
+  //testing level. Load token on app start
+  // hydrateAuth: async () => {
+  //   try{
+  //     const token = await SecureStore.getItemAsync("accessToken");
 
-      if (token) {
-        set({
-          user: {
-            email: "",
-            token,
-          },
-        });
+  //     if (token) {
+  //       set({
+  //         user: {
+  //           email: "",
+  //           token,
+  //         },
+  //       });
+  //     }
+  //   }
+  //   finally {
+  //     set({ hydrated: true });
+  //   }
+  // },
+
+  // production level 
+
+  hydrateAuth: async () => {
+    try {
+      const token =
+        await SecureStore.getItemAsync(
+          "accessToken"
+        );
+
+      if (!token) {
+        return;
       }
-    }
-    finally {
-      set({ hydrated: true });
+
+      const res = await getMe();
+
+      if (!res?.success) {
+        set ({user: null});
+        return;
+      }
+
+      set({
+        user: {
+          id: res.data._id,
+          email: res.data.email,
+          fullName: res.data.fullName,
+          // token,
+        },
+      });
+    } catch (error) {
+      await SecureStore.deleteItemAsync(
+        "accessToken"
+      );
+
+      set({
+        user: null,
+      });
+    } finally {
+      set({
+        hydrated: true,
+      });
     }
   },
 
