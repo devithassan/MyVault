@@ -1,7 +1,7 @@
 // src/app/auth/login.tsx
 
+import { authPersistence } from "@/features/auth/auth.persistence";
 import { useRouter } from "expo-router";
-import * as SecureStore from "expo-secure-store";
 import { useState } from "react";
 import { Alert, Button, Text, TextInput, View } from "react-native";
 
@@ -30,10 +30,6 @@ export default function LoginScreen() {
 
       const res = await authService.login(email.trim(), password);
 
-      // console.log(
-      //   "ACCESS TOKEN:",
-      //   res.accessToken
-      // );
 
       console.log("LOGIN RESPONSE:", res);
 
@@ -42,47 +38,19 @@ export default function LoginScreen() {
         return;
       }
 
-      // const token = 
-      //   res?.data?.accessToken ??
-      //   res?.data?.token; // depending on backend response structure
-      // const token = res?.data?.data?.accessToken; // for nested response structure
-      const { accessToken, user } = res.data;
-      // if (!token) {
-      //   Alert.alert("Error", "No token returned from server");
-      //   return;
-      // }  
+      const { accessToken, refreshToken, user } = res.data;
+
 
       if (!accessToken) {
         Alert.alert("Error", "No token returned");
         return;
       }
 
-      // await SecureStore.setItemAsync("accessToken", token);
-      await SecureStore.setItemAsync("accessToken", accessToken);
-      // setUser({
-      //   token,
-      //   email,
-      // });
 
-      // setUser({
-      //   token,
-      //   email: res?.data?.data?.user?.email,
-      // });
 
-      // testing level
-      // setUser({
-      //   token: accessToken,
-      //   email: user.email,
-      // });
+      await authPersistence.setAccessToken(accessToken);
+      await authPersistence.setRefreshToken(refreshToken);
 
-      // procuction level
-      // setUser({
-      //   id: res.user.id,
-      //   email: res.user.email,
-      //   fullName: res.user.fullName,
-      //   // token,
-      // });
-        // OR below
       setUser({
         id: user.id,
         email: user.email,
@@ -125,45 +93,3 @@ export default function LoginScreen() {
   );
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import { useAuthStore } from "@/store/auth.store";
-// import { useRouter } from "expo-router";
-// import * as SecureStore from "expo-secure-store";
-// import { Button, Text, View } from "react-native";
-
-// export default function LoginScreen() {
-//   const router = useRouter();
-//   const setUser = useAuthStore((s) => s.setUser);
-
-//   const handleLogin = async () => {
-//     // TEMP MOCK LOGIN (we will connect backend next step)
-//     const fakeToken = "vault-token-123";
-
-//     await SecureStore.setItemAsync("accessToken", fakeToken);
-
-//     setUser({ token: fakeToken });
-
-//     router.replace("/(tabs)");
-//   };
-
-//   return (
-//     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-//       <Text>Login Screen</Text>
-
-//       <Button title="Login (Mock)" onPress={handleLogin} />
-//     </View>
-//   );
-// }

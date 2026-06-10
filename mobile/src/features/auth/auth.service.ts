@@ -56,3 +56,10 @@ export async function createPassword(email: string, password: string) {
   return res.data;
 }
 
+// export const refreshSession = async (refreshToken: string) => {
+//   const res = await api.post("/auth/refresh", {
+//     refreshToken,
+//   });
+
+//   return res.data;
+// };

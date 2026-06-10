@@ -2,7 +2,8 @@
 
 import { getOnboardingStatus } from "@/features/auth/auth.service";
 import { getMe } from "@/features/user/user.service";
-import * as SecureStore from "expo-secure-store";
+// import * as SecureStore from "expo-secure-store";
+import { authPersistence } from "@/features/auth/auth.persistence";
 import { create } from "zustand";
 
 type OnboardingStatus =
@@ -78,13 +79,24 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   hydrateAuth: async () => {
     try {
+      // const token =
+      //   await SecureStore.getItemAsync(
+      //     "accessToken"
+      //   );
       const token =
-        await SecureStore.getItemAsync(
-          "accessToken"
-        );
+        await authPersistence.getAccessToken();
+
 
       if (!token) {
         return;
+
+      // if (!token) {              //if importing from types
+      //   set({
+      //     user: null,
+      //   });
+
+      //   return;
+      // }
       }
 
       const res = await getMe();
@@ -103,9 +115,10 @@ export const useAuthStore = create<AuthState>((set) => ({
         },
       });
     } catch (error) {
-      await SecureStore.deleteItemAsync(
-        "accessToken"
-      );
+      // await SecureStore.deleteItemAsync(
+      //   "accessToken"
+      // );
+      await authPersistence.deleteAccessToken();
 
       set({
         user: null,
@@ -118,7 +131,13 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   logout: async () => {
-    await SecureStore.deleteItemAsync("accessToken");
-    set({ user: null });
+    // await SecureStore.deleteItemAsync("accessToken");
+    await authPersistence.deleteAccessToken();
+
+    set({
+      user: null,
+      email: "",
+      onboardingStatus: null,
+    });
   },
 }));
