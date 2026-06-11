@@ -1,166 +1,196 @@
 // src/app/(tabs)/index.tsx
 
-import { useAuthStore } from "@/features/auth/auth.store";
-import { useRouter } from "expo-router";
-import { Button, View } from "react-native";
 
-export default function Home() {
-  const router = useRouter();
-  console.log("HOME SCREEN RENDERED");
-  const logout = useAuthStore(
-  (s) => s.logout
-);
-  
+import { useEffect, useState } from "react";
+import { View } from "react-native";
+
+import Screen from "@/components/layout/Screen";
+import { VaultCard } from "@/components/vault/VaultCard";
+import { VaultEmptyState } from "@/components/vault/VaultEmptyState";
+import { VaultHeader } from "@/components/vault/VaultHeader";
+
+import Text from "@/components/ui/Text";
+import { useTheme } from "@/theme/useTheme";
+
+type VaultItem = {
+  id: string;
+  title: string;
+  subtitle: string;
+};
+
+export default function DashboardScreen() {
+  const theme = useTheme();
+
+  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState<VaultItem[]>([]);
+
+  useEffect(() => {
+    /**
+     * MOCK FETCH (replace with API later)
+     */
+    setTimeout(() => {
+      setItems([
+        {
+          id: "1",
+          title: "Google Account",
+          subtitle: "gmail.com",
+        },
+        {
+          id: "2",
+          title: "Bank Login",
+          subtitle: "hbl banking",
+        },
+      ]);
+
+      setLoading(false);
+    }, 800);
+  }, []);
+
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        padding: 20,
-        gap: 12,
-      }}
-    >
-      <Button
-        title="Auth Entry"
-        onPress={() =>
-          router.push("/auth")
-        }
-      />
+    <Screen>
+      <VaultHeader />
 
-      <Button
-        title="Create Password"
-        onPress={() =>
-          router.push("/auth/create-password")
-        }
-      />
-
-      <Button
-        title="Login"
-        onPress={() => {
-          console.log("GO LOGIN");
-          router.push("/auth/login");
-        }}
-      />
-
-      {/* <Button
-        title="Logout"
-        onPress={async () => {
-          await logout();
-
-          router.replace("/auth");
-
-          console.log("LOGGED OUT");
-        }}
-      /> */}
-
-      <Button
-        title="Logout"
-        onPress={async () => {
-          await logout();
-
-          router.replace("/auth");
-        }}
-      />
-    </View>
+      {loading ? (
+        <View style={{ marginTop: 20 }}>
+          <Text variant="muted">Loading vault...</Text>
+          {/* <Text color="secondary">Loading vault...</Text> */}
+        </View>
+      ) : items.length === 0 ? (
+        <VaultEmptyState />
+      ) : (
+        <View style={{ gap: theme.spacing.md, marginTop: 16 }}>
+          {items.map((item) => (
+            <VaultCard
+              key={item.id}
+              title={item.title}
+              subtitle={item.subtitle}
+            />
+          ))}
+        </View>
+      )}
+    </Screen>
   );
 }
 
 
-// import { Image } from 'expo-image';
-// import { Platform, StyleSheet } from 'react-native';
+// real production app
+// import { Text, View } from "react-native";
 
-// import { HelloWave } from '@/components/hello-wave';
-// import ParallaxScrollView from '@/components/parallax-scroll-view';
-// import { ThemedText } from '@/components/themed-text';
-// import { ThemedView } from '@/components/themed-view';
-// import { Link } from 'expo-router';
+// import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 // export default function HomeScreen() {
-//   return (
-//     <ParallaxScrollView
-//       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-//       headerImage={
-//         <Image
-//           source={require('@/assets/images/partial-react-logo.png')}
-//           style={styles.reactLogo}
-//         />
-//       }>
-//       <ThemedView style={styles.titleContainer}>
-//         <ThemedText type="title">Welcome!</ThemedText>
-//         <HelloWave />
-//       </ThemedView>
-//       <ThemedView style={styles.stepContainer}>
-//         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-//         <ThemedText>
-//           Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-//           Press{' '}
-//           <ThemedText type="defaultSemiBold">
-//             {Platform.select({
-//               ios: 'cmd + d',
-//               android: 'cmd + m',
-//               web: 'F12',
-//             })}
-//           </ThemedText>{' '}
-//           to open developer tools.
-//         </ThemedText>
-//       </ThemedView>
-//       <ThemedView style={styles.stepContainer}>
-//         <Link href="/modal">
-//           <Link.Trigger>
-//             <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-//           </Link.Trigger>
-//           <Link.Preview />
-//           <Link.Menu>
-//             <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-//             <Link.MenuAction
-//               title="Share"
-//               icon="square.and.arrow.up"
-//               onPress={() => alert('Share pressed')}
-//             />
-//             <Link.Menu title="More" icon="ellipsis">
-//               <Link.MenuAction
-//                 title="Delete"
-//                 icon="trash"
-//                 destructive
-//                 onPress={() => alert('Delete pressed')}
-//               />
-//             </Link.Menu>
-//           </Link.Menu>
-//         </Link>
+//   const user = useCurrentUser();
+//   const stats = [
+//   {
+//     title: "Vaults",
+//     value: "0",
+//   },
+//   {
+//     title: "Items",
+//     value: "0",
+//   },
+//   {
+//     title: "Storage",
+//     value: "0 MB",
+//   },
+// ];
 
-//         <ThemedText>
-//           {`Tap the Explore tab to learn more about what's included in this starter app.`}
-//         </ThemedText>
-//       </ThemedView>
-//       <ThemedView style={styles.stepContainer}>
-//         <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-//         <ThemedText>
-//           {`When you're ready, run `}
-//           <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-//           <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-//           <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-//           <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-//         </ThemedText>
-//       </ThemedView>
-//     </ParallaxScrollView>
+//   return (
+//     <View
+//       style={{
+//         flex: 1,
+//         padding: 24,
+//         gap: 24,
+//       }}
+//     >
+//       <View>
+//         <Text
+//           style={{
+//             fontSize: 28,
+//             fontWeight: "700",
+//           }}
+//         >
+//           Welcome Back
+//         </Text>
+
+//         <Text
+//           style={{
+//             marginTop: 4,
+//             fontSize: 16,
+//           }}
+//         >
+//           {user?.fullName}
+//         </Text>
+
+//         <Text>
+//           {user?.email}
+//         </Text>
+//       </View>
+//     </View>
 //   );
 // }
 
-// const styles = StyleSheet.create({
-//   titleContainer: {
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     gap: 8,
-//   },
-//   stepContainer: {
-//     gap: 8,
-//     marginBottom: 8,
-//   },
-//   reactLogo: {
-//     height: 178,
-//     width: 290,
-//     bottom: 0,
-//     left: 0,
-//     position: 'absolute',
-//   },
-// });
+
+
+
+
+
+
+
+
+
+
+// // Testing level
+// import { useAuthStore } from "@/features/auth/auth.store";
+// import { useRouter } from "expo-router";
+// import { Button, View } from "react-native";
+
+// export default function Home() {
+//   const router = useRouter();
+//   console.log("HOME SCREEN RENDERED");
+//   const logout = useAuthStore(
+//   (s) => s.logout
+// );
+  
+//   return (
+//     <View
+//       style={{
+//         flex: 1,
+//         justifyContent: "center",
+//         padding: 20,
+//         gap: 12,
+//       }}
+//     >
+//       <Button
+//         title="Auth Entry"
+//         onPress={() =>
+//           router.push("/auth")
+//         }
+//       />
+
+//       <Button
+//         title="Create Password"
+//         onPress={() =>
+//           router.push("/auth/create-password")
+//         }
+//       />
+
+//       <Button
+//         title="Login"
+//         onPress={() => {
+//           console.log("GO LOGIN");
+//           router.push("/auth/login");
+//         }}
+//       />
+
+//       <Button
+//         title="Logout"
+//         onPress={async () => {
+//           await logout();
+
+//           router.replace("/auth");
+//         }}
+//       />
+//     </View>
+//   );
+// }

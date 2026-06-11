@@ -1,9 +1,9 @@
 // src/features/auth/auth.store.ts
 
-import { getOnboardingStatus } from "@/features/auth/auth.service";
-import { getMe } from "@/features/user/user.service";
-// import * as SecureStore from "expo-secure-store";
 import { authPersistence } from "@/features/auth/auth.persistence";
+import { getOnboardingStatus } from "@/features/auth/auth.service";
+// import { getMe } from "@/features/user/user.service";
+import { userService } from "@/features/user/user.service";
 import { create } from "zustand";
 
 type OnboardingStatus =
@@ -12,10 +12,6 @@ type OnboardingStatus =
   | "LOGIN";
 
 
-// type User = {            // testing level. after login store! this is for temp testing auth 
-//   email: string;
-//   token: string;
-// };
 
 type User = {          // production level. loading actual user profile
   id: string;
@@ -56,53 +52,30 @@ export const useAuthStore = create<AuthState>((set) => ({
     return res;
   },
 
-  //testing level. Load token on app start
-  // hydrateAuth: async () => {
-  //   try{
-  //     const token = await SecureStore.getItemAsync("accessToken");
 
-  //     if (token) {
-  //       set({
-  //         user: {
-  //           email: "",
-  //           token,
-  //         },
-  //       });
-  //     }
-  //   }
-  //   finally {
-  //     set({ hydrated: true });
-  //   }
-  // },
-
-  // production level 
 
   hydrateAuth: async () => {
     try {
-      // const token =
-      //   await SecureStore.getItemAsync(
-      //     "accessToken"
-      //   );
+
       const token =
         await authPersistence.getAccessToken();
 
 
       if (!token) {
+        set({ user:null, });
+
         return;
 
-      // if (!token) {              //if importing from types
-      //   set({
-      //     user: null,
-      //   });
-
-      //   return;
-      // }
       }
 
-      const res = await getMe();
+      // const res = await getMe();
+      const res = await userService.getMe();
 
       if (!res?.success) {
+        await authPersistence.clearAll();
+
         set ({user: null});
+
         return;
       }
 
@@ -115,10 +88,9 @@ export const useAuthStore = create<AuthState>((set) => ({
         },
       });
     } catch (error) {
-      // await SecureStore.deleteItemAsync(
-      //   "accessToken"
-      // );
-      await authPersistence.deleteAccessToken();
+
+      // await authPersistence.deleteAccessToken();
+      await authPersistence.clearAll();
 
       set({
         user: null,
@@ -131,8 +103,9 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   logout: async () => {
-    // await SecureStore.deleteItemAsync("accessToken");
-    await authPersistence.deleteAccessToken();
+
+    // await authPersistence.deleteAccessToken();
+    await authPersistence.clearAll();
 
     set({
       user: null,

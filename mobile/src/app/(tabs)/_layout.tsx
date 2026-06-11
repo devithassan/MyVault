@@ -1,51 +1,69 @@
 // // src/app/(tabs)/_layout.tsx
 
 
-// src/app/(tabs)/_layout.tsx
-
+import Text from "@/components/ui/Text";
+import { useTheme } from "@/theme/useTheme";
 import { Tabs } from "expo-router";
+import { View } from "react-native";
 
-import { HapticTab } from "@/components/haptic-tab";
-import { IconSymbol } from "@/components/ui/icon-symbol";
-import { Colors } from "@/constants/theme";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+function TabIcon({
+  label,
+  focused,
+}: {
+  label: string;
+  focused: boolean;
+}) {
+  const theme = useTheme();
+
+  return (
+    <View style={{ alignItems: "center", justifyContent: "center" }}>
+      <Text
+        style={{
+          fontSize: 12,
+          color: focused
+            ? theme.colors.primary
+            : theme.colors.muted,
+          fontWeight: focused ? "600" : "400",
+        }}
+      >
+        {label}
+      </Text>
+    </View>
+  );
+}
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const theme = useTheme();
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor:
-          Colors[colorScheme ?? "light"].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
+        tabBarStyle: {
+          backgroundColor: theme.colors.background,
+          borderTopColor: theme.colors.border,
+          height: 60,
+        },
+        tabBarActiveTintColor: theme.colors.primary,
+        tabBarInactiveTintColor: theme.colors.muted,
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol
-              size={28}
-              name="house.fill"
-              color={color}
-            />
+          title: "Vault",
+          tabBarIcon: ({ focused }) => (
+            <TabIcon label="Vault" focused={focused} />
           ),
         }}
       />
 
       <Tabs.Screen
-        name="explore"
+        name="profile"
         options={{
-          title: "Explore",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol
-              size={28}
-              name="paperplane.fill"
-              color={color}
-            />
+          title: "Profile",
+          tabBarIcon: ({ focused }) => (
+            <TabIcon label="Profile" focused={focused} />
           ),
         }}
       />
@@ -53,103 +71,86 @@ export default function TabLayout() {
   );
 }
 
-// import { Tabs } from ".expo/types/router";
-// import { HapticTab } from "@/components/haptic-tab";
-// import { IconSymbol } from "@/components/ui/icon-symbol.ios";
-// import { Colors } from "@/constants/theme";
-// import { useColorScheme } from "@/hooks/use-color-scheme.web";
+// import { Tabs } from "expo-router";
+// import { View } from "react-native";
 
-// // testing
+// import { Text } from "@/components/ui/Text";
+// import { useTheme } from "@/theme/useTheme";
 
-// export default function TabLayout() {
-//   const colorScheme = useColorScheme();
+// /**
+//  * Simple icon replacement (NO expo template dependency)
+//  * You can later upgrade to lucide/react-native or vector-icons
+//  */
+// function TabIcon({
+//   label,
+//   focused,
+// }: {
+//   label: string;
+//   focused: boolean;
+// }) {
+//   const theme = useTheme();
 
 //   return (
-//     <Tabs
-//       screenOptions={{
-//         tabBarActiveTintColor:
-//           Colors[colorScheme ?? "light"].tint,
-//         headerShown: false,
-//         tabBarButton: HapticTab,
+//     <View
+//       style={{
+//         alignItems: "center",
+//         justifyContent: "center",
 //       }}
 //     >
-//       <Tabs.Screen
-//         name="index"
-//         options={{
-//           title: "Home",
-//           tabBarIcon: ({ color }) => (
-//             <IconSymbol
-//               size={28}
-//               name="house.fill"
-//               color={color}
-//             />
-//           ),
+//       <Text
+//         style={{
+//           fontSize: 12,
+//           color: focused
+//             ? theme.colors.primary
+//             : theme.colors.muted,
+//           fontWeight: focused ? "600" : "400",
 //         }}
-//       />
-
-//       <Tabs.Screen
-//         name="explore"
-//         options={{
-//           title: "Explore",
-//           tabBarIcon: ({ color }) => (
-//             <IconSymbol
-//               size={28}
-//               name="paperplane.fill"
-//               color={color}
-//             />
-//           ),
-//         }}
-//       />
-//     </Tabs>
+//       >
+//         {label}
+//       </Text>
+//     </View>
 //   );
 // }
 
-
-
-
-
-// import { useAuthStore } from '@/features/auth/auth.store';
-// import { Tabs, useRouter } from 'expo-router';
-// import React, { useEffect } from 'react';
-
-
-// import { HapticTab } from '@/components/haptic-tab';
-// import { IconSymbol } from '@/components/ui/icon-symbol';
-// import { Colors } from '@/constants/theme';
-// import { useColorScheme } from '@/hooks/use-color-scheme';
-
 // export default function TabLayout() {
-//   const colorScheme = useColorScheme();
-//   const { user, hydrated } = useAuthStore();
-//   const router = useRouter();
-
-//   useEffect(() => {
-//     if (!hydrated) return;
-
-//     if (!user) {
-//       router.replace("/auth");
-//     }
-//   }, [user, hydrated]);
+//   const theme = useTheme();
 
 //   return (
 //     <Tabs
 //       screenOptions={{
-//         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
 //         headerShown: false,
-//         tabBarButton: HapticTab,
-//       }}>
+
+//         tabBarStyle: {
+//           backgroundColor: theme.colors.background,
+//           borderTopColor: theme.colors.border,
+//           height: 60,
+//           paddingBottom: 8,
+//           paddingTop: 8,
+//         },
+
+//         tabBarActiveTintColor: theme.colors.primary,
+//         tabBarInactiveTintColor: theme.colors.muted,
+//       }}
+//     >
+//       {/* DASHBOARD */}
 //       <Tabs.Screen
 //         name="index"
 //         options={{
-//           title: 'Home',
-//           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+//           title: "Vault",
+//           tabBarLabel: ({ focused }) => (
+//             <TabIcon label="Vault" focused={focused} />
+//           ),
 //         }}
 //       />
+
+//       {/* PROFILE */}
 //       <Tabs.Screen
-//         name="explore"
+//         name="profile"
 //         options={{
-//           title: 'Explore',
-//           tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+//           title: "Profile",
+//           tabBarLabel: ({ focused }) => (
+//             <TabIcon label="Profile" focused={focused} />
+//           ),
 //         }}
 //       />
 //     </Tabs>
