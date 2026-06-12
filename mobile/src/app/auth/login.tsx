@@ -4,7 +4,7 @@
 
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Alert, View } from "react-native";
+import { Alert, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, View, } from "react-native";
 
 import Screen from "@/components/layout/Screen";
 import Button from "@/components/ui/Button";
@@ -15,6 +15,8 @@ import { authPersistence } from "@/features/auth/auth.persistence";
 import { authService } from "@/features/auth/auth.service";
 import { useAuthStore } from "@/features/auth/auth.store";
 import { useTheme } from "@/theme/useTheme";
+
+
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -77,49 +79,64 @@ export default function LoginScreen() {
   };
 
   return (
-    <Screen>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          gap: theme.spacing.lg,
-        }}
+    <TouchableWithoutFeedback
+      onPress={Keyboard.dismiss}
+      accessible={false}
+    >
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={
+          Platform.OS === "ios"
+            ? "padding"
+            : "height"
+        }
       >
-        {/* TITLE */}
-        <View style={{ gap: theme.spacing.xs }}>
-          <Text variant="title">Welcome Back</Text>
+        <Screen>
 
-          <Text variant="muted">
-            Login to continue to Vault
-          </Text>
-        </View>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              gap: theme.spacing.lg,
+            }}
+          >
+            {/* TITLE */}
+            <View style={{ gap: theme.spacing.xs }}>
+              <Text variant="title">Welcome Back</Text>
 
-        {/* FORM */}
-        <View style={{ gap: theme.spacing.md }}>
-          <Input
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
+              <Text variant="muted">
+                Login to continue to Vault
+              </Text>
+            </View>
 
-          <Input
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-        </View>
+            {/* FORM */}
+            <View style={{ gap: theme.spacing.md }}>
+              <Input
+                placeholder="Email"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
 
-        {/* BUTTON */}
-        <Button
-          title={loading ? "Signing in..." : "Login"}
-          onPress={handleLogin}
-          disabled={loading}
-        />
-      </View>
-    </Screen>
+              <Input
+                placeholder="Password"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+              />
+            </View>
+
+            {/* BUTTON */}
+            <Button
+              title={loading ? "Signing in..." : "Login"}
+              onPress={handleLogin}
+              disabled={loading}
+            />
+          </View>
+        </Screen>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 }
 

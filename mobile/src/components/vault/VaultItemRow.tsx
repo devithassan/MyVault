@@ -1,4 +1,6 @@
-import { Text } from "@/components/ui/Text";
+// src/components/vault/VaulItemRow.tsx
+
+import Text from "@/components/ui/Text";
 import { View } from "react-native";
 
 export function VaultItemRow({
@@ -17,7 +19,7 @@ export function VaultItemRow({
       }}
     >
       <Text>{title}</Text>
-      <Text color="secondary">{value}</Text>
+      <Text variant ="muted">{value}</Text>
     </View>
   );
 }

@@ -1,10 +1,19 @@
-// src/components/ui/Text.tsx
+import React from "react";
+import {
+  Text as RNText,
+  TextStyle,
+} from "react-native";
 
 import { useTheme } from "@/theme/useTheme";
-import React from "react";
-import { Text as RNText, TextStyle } from "react-native";
 
-type TextVariant = "default" | "title" | "muted" | "error";
+type TextVariant =
+  | "display"
+  | "title"
+  | "subtitle"
+  | "body"
+  | "caption"
+  | "muted"
+  | "error";
 
 type Props = {
   children: React.ReactNode;
@@ -14,90 +23,62 @@ type Props = {
 
 export default function Text({
   children,
-  variant = "default",
+  variant = "body",
   style,
 }: Props) {
   const theme = useTheme();
 
-  const getStyle = (): TextStyle => {
-    switch (variant) {
-      case "title":
-        return {
-          fontSize: 24,
-          fontWeight: "700",
-          color: theme.colors.text,
-        };
+  const variantStyle: Record<
+    TextVariant,
+    TextStyle
+  > = {
+    display: {
+      fontSize: 32,
+      fontWeight: "700",
+      color: theme.colors.text,
+    },
 
-      case "muted":
-        return {
-          fontSize: 14,
-          color: theme.colors.muted,
-        };
+    title: {
+      fontSize: 24,
+      fontWeight: "700",
+      color: theme.colors.text,
+    },
 
-      case "error":
-        return {
-          fontSize: 14,
-          color: theme.colors.error,
-        };
+    subtitle: {
+      fontSize: 18,
+      fontWeight: "600",
+      color: theme.colors.text,
+    },
 
-      default:
-        return {
-          fontSize: 16,
-          color: theme.colors.text,
-        };
-    }
+    body: {
+      fontSize: 16,
+      color: theme.colors.text,
+    },
+
+    caption: {
+      fontSize: 12,
+      color: theme.colors.muted,
+    },
+
+    muted: {
+      fontSize: 14,
+      color: theme.colors.muted,
+    },
+
+    error: {
+      fontSize: 14,
+      color: theme.colors.error,
+    },
   };
 
-  return <RNText style={[getStyle(), style]}>{children}</RNText>;
+  return (
+    <RNText
+      style={[
+        variantStyle[variant],
+        style,
+      ]}
+    >
+      {children}
+    </RNText>
+  );
 }
-
-
-// import { useTheme } from "@/theme/useTheme";
-// import { Text as RNText, TextProps } from "react-native";
-
-// type Props = TextProps & {
-//   variant?: "title" | "body" | "caption" | "label";
-//   color?: "primary" | "secondary" | "danger";
-// };
-
-// export function Text({
-//   variant = "body",
-//   color = "primary",
-//   style,
-//   ...props
-// }: Props) {
-//   const theme = useTheme();
-
-//   return (
-//     <RNText
-//       {...props}
-//       style={[
-//         {
-//           color:
-//             color === "primary"
-//               ? theme.colors.text
-//               : color === "secondary"
-//               ? theme.colors.muted
-//               : theme.colors.error,
-
-//           fontSize:
-//             variant === "title"
-//               ? 22
-//               : variant === "label"
-//               ? 14
-//               : variant === "caption"
-//               ? 12
-//               : 16,
-
-//           fontWeight:
-//             variant === "title"
-//               ? "700"
-//               : variant === "label"
-//               ? "600"
-//               : "400",
-//         },
-//         style,
-//       ]}
-//     />
-//   );
-// }

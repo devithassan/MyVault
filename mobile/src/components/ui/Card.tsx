@@ -1,18 +1,45 @@
 // src/components/ui/Card.tsx
 
-import { useTheme } from "@/theme/useTheme";
-import { View } from "react-native";
+import React from "react";
 
-export function Card({ children }: { children: React.ReactNode }) {
+import {
+  View,
+  ViewStyle,
+} from "react-native";
+
+import { useTheme } from "@/theme/useTheme";
+
+type Props = {
+  children: React.ReactNode;
+  style?: ViewStyle;
+};
+
+export function Card({
+  children,
+  style,
+}: Props) {
   const theme = useTheme();
 
   return (
     <View
-      style={{
-        backgroundColor: theme.colors.card,
-        padding: theme.spacing.md,
-        borderRadius: 12,
-      }}
+      style={[
+        {
+          backgroundColor:
+            theme.colors.card,
+
+          padding:
+            theme.spacing.md,
+
+          borderRadius: 16,
+
+          borderWidth: 1,
+
+          borderColor:
+            theme.colors.border,
+        },
+
+        style,
+      ]}
     >
       {children}
     </View>

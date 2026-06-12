@@ -1,5 +1,7 @@
+// src/components/vault/VaultCard.tsx
+
 import { Card } from "@/components/ui/Card";
-import { Text } from "@/components/ui/Text";
+import Text from "@/components/ui/Text";
 
 export function VaultCard({
   title,
@@ -11,7 +13,7 @@ export function VaultCard({
   return (
     <Card>
       <Text variant="title">{title}</Text>
-      {subtitle && <Text color="secondary">{subtitle}</Text>}
+      {subtitle && <Text variant="muted">{subtitle}</Text>}
     </Card>
   );
 }
