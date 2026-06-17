@@ -1,9 +1,10 @@
 // src/features/vault/components/VaultList.tsx
 
-import { ActivityIndicator, View } from "react-native";
 
 import Text from "@/components/ui/Text";
 import { VaultCard } from "@/components/vault/VaultCard";
+import { useRouter } from "expo-router";
+import { ActivityIndicator, View } from "react-native";
 
 import { useTheme } from "@/theme/useTheme";
 
@@ -38,14 +39,42 @@ export function VaultList({
     );
   }
 
+  // if (!vaults.length) {
+  //   return (
+  //     <Text variant="muted">
+  //       No vaults found
+  //     </Text>
+  //   );
+  // }
+
   if (!vaults.length) {
     return (
-      <Text variant="muted">
-        No vaults found
-      </Text>
+      <View
+        style={{
+          paddingVertical: theme.spacing.xl,
+          alignItems: "center",
+        }}
+      >
+        <Text variant="subtitle">
+          No Vaults Yet
+        </Text>
+
+        <Text
+          variant="muted"
+          style={{
+            marginTop: theme.spacing.sm,
+            textAlign: "center",
+          }}
+        >
+          Create your first vault to securely
+          store passwords, notes, banking
+          details, cards, and identities.
+        </Text>
+      </View>
     );
   }
 
+  const router = useRouter();
   return (
     <View
       style={{
@@ -53,6 +82,7 @@ export function VaultList({
       }}
     >
       {vaults.map((vault) => (
+
         <VaultCard
           key={vault.id}
           title={vault.title}
@@ -63,7 +93,26 @@ export function VaultList({
             vault.category ||
             "Vault Item"
           }
+          onPress={() =>
+            router.push({
+              pathname: "/vault/[id]",
+              params: {
+                id: vault.id,
+              },
+            })
+          }
         />
+        // <VaultCard
+        //   key={vault.id}
+        //   title={vault.title}
+        //   subtitle={
+        //     vault.email ||
+        //     vault.username ||
+        //     vault.website ||
+        //     vault.category ||
+        //     "Vault Item"
+        //   }
+        // />
       ))}
     </View>
   );

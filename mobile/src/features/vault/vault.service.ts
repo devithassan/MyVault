@@ -14,6 +14,11 @@ type SingleVaultResponse = {
 export const vaultService = {
   getAll: async (): Promise<Vault[]> => {
     const res = await api.get<VaultResponse>("/vault");
+
+    console.log(    //temp log for vault response
+      "VAULT RESPONSE:",
+      res.data
+    );
     return res.data.data;
   },
 

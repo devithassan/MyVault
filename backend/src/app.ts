@@ -5,6 +5,7 @@ import cors from "@fastify/cors";
 
 import authRoutes from "./modules/auth/auth.routes";
 import userRoutes from "./modules/users/user.routes";
+import vaultRoutes from "./modules/vaults/vault.routes";
 
 
 const app = Fastify({
@@ -30,6 +31,10 @@ app.register(authRoutes, {
 
 app.register(userRoutes, {
   prefix: "/api/users",
+});
+
+app.register(vaultRoutes, {
+  prefix: "/api/vault",
 });
 
 export default app;

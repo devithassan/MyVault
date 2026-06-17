@@ -3,7 +3,9 @@
 
 import { useState } from "react";
 import {
+  Keyboard,
   ScrollView,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 
@@ -31,136 +33,143 @@ export default function DashboardScreen() {
 
   return (
     <Screen>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
+      <TouchableWithoutFeedback
+        onPress={Keyboard.dismiss}
       >
-        {/* HEADER */}
 
-        <View
-          style={{
-            marginBottom:
-              theme.spacing.lg,
-          }}
+      
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
         >
-          <Text variant="title">
-            Welcome Back
-          </Text>
+          {/* HEADER */}
 
-          <Text variant="muted">
-            {user?.fullName}
-          </Text>
-        </View>
-
-        {/* SEARCH */}
-
-        <VaultSearchBar
-          value={search}
-          onChangeText={setSearch}
-        />
-
-        <View
-          style={{
-            height:
-              theme.spacing.lg,
-          }}
-        />
-
-        {/* STATS */}
-
-        <VaultStats
-          vaults={12}
-          items={84}
-          storage="128MB"
-        />
-
-        <View
-          style={{
-            height:
-              theme.spacing.xl,
-          }}
-        />
-
-        {/* CATEGORIES */}
-
-        <Text variant="subtitle">
-          Categories
-        </Text>
-
-        <View
-          style={{
-            flexDirection: "row",
-            gap: theme.spacing.md,
-            marginTop:
-              theme.spacing.md,
-          }}
-        >
-          <VaultCategoryCard
-            title="Personal"
-            count={24}
-          />
-
-          <VaultCategoryCard
-            title="Work"
-            count={12}
-          />
-        </View>
-
-        <View
-          style={{
-            flexDirection: "row",
-            gap: theme.spacing.md,
-            marginTop:
-              theme.spacing.md,
-          }}
-        >
-          <VaultCategoryCard
-            title="Finance"
-            count={8}
-          />
-
-          <VaultCategoryCard
-            title="Passwords"
-            count={40}
-          />
-        </View>
-
-        <View
-          style={{
-            height:
-              theme.spacing.xl,
-          }}
-        />
-
-        {/* RECENT */}
-
-        <Text variant="subtitle">
-          Recent Vaults
-        </Text>
-
-        <View
-          style={{
-            marginTop:
-              theme.spacing.md,
-          }}
-        >
-          {loading ? (
-            <Text variant="muted">
-              Loading vaults...
+          <View
+            style={{
+              marginBottom:
+                theme.spacing.lg,
+            }}
+          >
+            <Text variant="title">
+              Welcome Back
             </Text>
-          ) : (
-            <VaultList
-              vaults={vaults}
+
+            <Text variant="muted">
+              {user?.fullName}
+            </Text>
+          </View>
+
+          {/* SEARCH */}
+
+          <VaultSearchBar
+            value={search}
+            onChangeText={setSearch}
+          />
+
+          <View
+            style={{
+              height:
+                theme.spacing.lg,
+            }}
+          />
+
+          {/* STATS */}
+
+          <VaultStats
+            vaults={12}
+            items={84}
+            storage="128MB"
+          />
+
+          <View
+            style={{
+              height:
+                theme.spacing.xl,
+            }}
+          />
+
+          {/* CATEGORIES */}
+
+          <Text variant="subtitle">
+            Categories
+          </Text>
+
+          <View
+            style={{
+              flexDirection: "row",
+              gap: theme.spacing.md,
+              marginTop:
+                theme.spacing.md,
+            }}
+          >
+            <VaultCategoryCard
+              title="Personal"
+              count={24}
             />
-          )}
-        </View>
 
-        <View
-          style={{
-            height: 120,
-          }}
-        />
-      </ScrollView>
+            <VaultCategoryCard
+              title="Work"
+              count={12}
+            />
+          </View>
 
+          <View
+            style={{
+              flexDirection: "row",
+              gap: theme.spacing.md,
+              marginTop:
+                theme.spacing.md,
+            }}
+          >
+            <VaultCategoryCard
+              title="Finance"
+              count={8}
+            />
+
+            <VaultCategoryCard
+              title="Passwords"
+              count={40}
+            />
+          </View>
+
+          <View
+            style={{
+              height:
+                theme.spacing.xl,
+            }}
+          />
+
+          {/* RECENT */}
+
+          <Text variant="subtitle">
+            Recent Vaults
+          </Text>
+
+          <View
+            style={{
+              marginTop:
+                theme.spacing.md,
+            }}
+          >
+            {loading ? (
+              <Text variant="muted">
+                Loading vaults...
+              </Text>
+            ) : (
+              <VaultList
+                vaults={vaults}
+              />
+            )}
+          </View>
+
+          <View
+            style={{
+              height: 120,
+            }}
+          />
+        </ScrollView>
+
+      </TouchableWithoutFeedback>      
       <VaultFAB />
     </Screen>
   );

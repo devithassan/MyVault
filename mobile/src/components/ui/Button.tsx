@@ -1,40 +1,59 @@
 // src/components/ui/Button.tsx
 
+import {
+  ActivityIndicator,
+  Pressable,
+} from "react-native";
 
+import Text from "@/components/ui/Text";
 import { useTheme } from "@/theme/useTheme";
-import React from "react";
-import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
 
 type Props = {
   title: string;
   onPress: () => void;
+
   disabled?: boolean;
+  loading?: boolean;
 };
 
 export default function Button({
   title,
   onPress,
   disabled = false,
+  loading = false,
 }: Props) {
   const theme = useTheme();
 
-  return (
-    <TouchableOpacity
-      onPress={onPress}
-      disabled={disabled}
-      style={{
-        backgroundColor: disabled
-          ? theme.colors.muted
-          : theme.colors.primary,
+  const isDisabled =
+    disabled || loading;
 
-        padding: theme.spacing.md,
-        borderRadius: 10,
+  return (
+    <Pressable
+      disabled={isDisabled}
+      onPress={onPress}
+      style={({ pressed }) => ({
+        backgroundColor:
+          theme.colors.primary,
+
+        paddingVertical:
+          theme.spacing.md,
+
+        borderRadius: 12,
+
         alignItems: "center",
         justifyContent: "center",
-      }}
+
+        opacity: isDisabled
+          ? 0.6
+          : pressed
+          ? 0.85
+          : 1,
+      })}
     >
-      {disabled ? (
-        <ActivityIndicator color="#fff" />
+      {loading ? (
+        <ActivityIndicator
+          color="#fff"
+        />
       ) : (
         <Text
           style={{
@@ -45,55 +64,69 @@ export default function Button({
           {title}
         </Text>
       )}
-    </TouchableOpacity>
+    </Pressable>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 // import { useTheme } from "@/theme/useTheme";
-// import {
-//     ActivityIndicator,
-//     Pressable,
-//     Text,
-// } from "react-native";
+// import React from "react";
+// import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
 
 // type Props = {
 //   title: string;
 //   onPress: () => void;
-//   loading?: boolean;
-//   variant?: "primary" | "secondary" | "danger";
+//   disabled?: boolean;
 // };
 
-// export function Button({
+// export default function Button({
 //   title,
 //   onPress,
-//   loading,
-//   variant = "primary",
+//   disabled = false,
 // }: Props) {
 //   const theme = useTheme();
 
 //   return (
-//     <Pressable
+//     <TouchableOpacity
 //       onPress={onPress}
+//       disabled={disabled}
 //       style={{
-//         backgroundColor:
-//           variant === "primary"
-//             ? theme.colors.primary
-//             : variant === "danger"
-//             ? theme.colors.error
-//             : theme.colors.card,
+//         backgroundColor: disabled
+//           ? theme.colors.muted
+//           : theme.colors.primary,
 
 //         padding: theme.spacing.md,
 //         borderRadius: 10,
 //         alignItems: "center",
-//         opacity: loading ? 0.7 : 1,
+//         justifyContent: "center",
 //       }}
 //     >
-//       {loading ? (
+//       {disabled ? (
 //         <ActivityIndicator color="#fff" />
 //       ) : (
-//         <Text style={{ color: "#fff", fontWeight: "600" }}>
+//         <Text
+//           style={{
+//             color: "#fff",
+//             fontWeight: "600",
+//           }}
+//         >
 //           {title}
 //         </Text>
 //       )}
-//     </Pressable>
+//     </TouchableOpacity>
 //   );
 // }
+
+
+
