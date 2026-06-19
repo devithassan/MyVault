@@ -11,11 +11,13 @@ import Text from "@/components/ui/Text";
 
 import { useTheme } from "@/theme/useTheme";
 
-import { VaultCategory } from "../vault.types";
+import { Vault, VaultCategory } from "../vault.types";
 import { VaultCategoryPicker } from "./VaultCategoryPicker";
 
 type Props = {
   loading?: boolean;
+  initialValues?: Partial<Vault>;
+  submitLabel?: string;
 
   onSubmit: (data: {
     title: string;
@@ -30,30 +32,36 @@ type Props = {
 
 export function VaultForm({
   loading = false,
+  initialValues,
+  submitLabel = "Create Vault",
   onSubmit,
 }: Props) {
   const theme = useTheme();
 
   const [title, setTitle] =
-    useState("");
+    useState(initialValues?.title ?? "");
 
   const [category, setCategory] =
-    useState<VaultCategory>("login");
+    useState<VaultCategory>(
+      initialValues?.category ?? "login"
+    );
 
   const [username, setUsername] =
-    useState("");
+    useState(initialValues?.username ?? "");
 
   const [email, setEmail] =
-    useState("");
+    useState(initialValues?.email ?? "");
 
   const [password, setPassword] =
-    useState("");
+    useState(initialValues?.password ?? "");
 
   const [website, setWebsite] =
-    useState("");
+    useState(initialValues?.website ?? "");
 
   const [notes, setNotes] =
-    useState("");
+    useState(initialValues?.notes ?? "");
+
+  
 
   const handleSubmit = () => {
     if (!title.trim()) return;
@@ -127,16 +135,15 @@ export function VaultForm({
         onChangeText={setNotes}
       />
 
+
       {/* <Button
-        title={
-          loading
-            ? "Creating..."
-            : "Create Vault"
-        }
+        title="Create Vault"
+        loading={loading}
         onPress={handleSubmit}
       /> */}
+
       <Button
-        title="Create Vault"
+        title={submitLabel}
         loading={loading}
         onPress={handleSubmit}
       />

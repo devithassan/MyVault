@@ -17,6 +17,11 @@ api.interceptors.request.use(
  
     const token = await authPersistence.getAccessToken();
 
+    // console.log( // temp log
+    //   "ACCESS TOKEN:",
+    //   token
+    // );
+
     if (token) {
 
       config.headers.Authorization = `Bearer ${token}`;

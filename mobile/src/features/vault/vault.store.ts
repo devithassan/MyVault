@@ -11,6 +11,7 @@ type VaultState = {
   fetchVaults: () => Promise<void>;
   setVaults: (vaults: Vault[]) => void;
   addVault: (vault: Vault) => void;
+  updateVault: (vault: Vault) => void;
   removeVault: (id: string) => void;
 };
 
@@ -23,6 +24,15 @@ export const useVaultStore = create<VaultState>((set, get) => ({
   addVault: (vault) =>
     set((state) => ({
       vaults: [vault, ...state.vaults],
+    })),
+
+  updateVault: (vault) =>
+    set((state) => ({
+      vaults: state.vaults.map((v) =>
+        v.id === vault.id
+          ? vault
+          : v
+      ),
     })),
 
   removeVault: (id) =>

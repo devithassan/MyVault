@@ -13,28 +13,138 @@ type SingleVaultResponse = {
 
 export const vaultService = {
   getAll: async (): Promise<Vault[]> => {
-    const res = await api.get<VaultResponse>("/vault");
+    const res =
+      await api.get<VaultResponse>(
+        "/vault"
+      );
+      console.log(    //temp log for vault response
+        "VAULT RESPONSE:",
+        res.data
+      );
 
-    console.log(    //temp log for vault response
-      "VAULT RESPONSE:",
-      res.data
+    return res.data.data.map(
+      (vault: any) => ({
+        id: vault._id,
+
+        title: vault.title,
+        category: vault.category,
+
+        username: vault.username,
+        email: vault.email,
+        password: vault.password,
+        website: vault.website,
+        notes: vault.notes,
+
+        createdAt: vault.createdAt,
+        updatedAt: vault.updatedAt,
+      })
     );
-    return res.data.data;
   },
 
-  getById: async (id: string): Promise<Vault> => {
-    const res = await api.get<SingleVaultResponse>(`/vault/${id}`);
-    return res.data.data;
+
+  // getAll: async (): Promise<Vault[]> => {
+  //   const res = await api.get<VaultResponse>("/vault");
+
+  //   console.log(    //temp log for vault response
+  //     "VAULT RESPONSE:",
+  //     res.data
+  //   );
+  //   return res.data.data;
+  // },
+
+  // getById: async (id: string): Promise<Vault> => {
+  //   const res = await api.get<SingleVaultResponse>(`/vault/${id}`);
+  //   return res.data.data;
+  // },
+
+  getById: async (
+    id: string
+  ): Promise<Vault> => {
+    const res =
+      await api.get<SingleVaultResponse>(
+        `/vault/${id}`
+      );
+
+    const vault: any =
+      res.data.data;
+
+    return {
+      id: vault._id,
+
+      title: vault.title,
+      category: vault.category,
+
+      username: vault.username,
+      email: vault.email,
+      password: vault.password,
+      website: vault.website,
+      notes: vault.notes,
+
+      createdAt: vault.createdAt,
+      updatedAt: vault.updatedAt,
+    };
   },
 
-  create: async (payload: Partial<Vault>): Promise<Vault> => {
-    const res = await api.post<SingleVaultResponse>("/vault", payload);
-    return res.data.data;
-  },
+  // create: async (payload: Partial<Vault>): Promise<Vault> => {
+  //   const res = await api.post<SingleVaultResponse>("/vault", payload);
+  //   return res.data.data;
+  // },
+
+  create: async (
+    payload: Partial<Vault>
+  ): Promise<Vault> => {
+    const res =
+      await api.post<
+        SingleVaultResponse
+      >("/vault", payload);
+
+    const vault: any =
+      res.data.data;
+
+    return {
+      id: vault._id,
+
+      title: vault.title,
+      category: vault.category,
+
+      username: vault.username,
+      email: vault.email,
+      password: vault.password,
+      website: vault.website,
+      notes: vault.notes,
+
+      createdAt: vault.createdAt,
+      updatedAt: vault.updatedAt,
+    };
+  },  
+
+
+  // update: async (id: string, payload: Partial<Vault>): Promise<Vault> => {
+  //   const res = await api.patch<SingleVaultResponse>(`/vault/${id}`, payload);
+  //   return res.data.data;
+  // },
 
   update: async (id: string, payload: Partial<Vault>): Promise<Vault> => {
     const res = await api.patch<SingleVaultResponse>(`/vault/${id}`, payload);
-    return res.data.data;
+    
+    const vault: any =
+      res.data.data;
+
+    return {
+      id: vault._id,
+
+      title: vault.title,
+      category: vault.category,
+
+      username: vault.username,
+      email: vault.email,
+      password: vault.password,
+      website: vault.website,
+      notes: vault.notes,
+
+      createdAt: vault.createdAt,
+      updatedAt: vault.updatedAt,
+    };
   },
 
   remove: async (id: string): Promise<void> => {

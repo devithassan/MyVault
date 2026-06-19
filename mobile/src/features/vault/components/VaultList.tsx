@@ -19,6 +19,10 @@ export function VaultList({
   vaults,
   loading = false,
 }: VaultListProps) {
+  console.log(
+    "VAULTS:",
+    JSON.stringify(vaults, null, 2)
+  );
   const theme = useTheme();
 
   if (loading) {
