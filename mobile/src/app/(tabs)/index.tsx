@@ -4,6 +4,7 @@
 import { useState } from "react";
 import {
   Keyboard,
+  RefreshControl,
   ScrollView,
   TouchableWithoutFeedback,
   View,
@@ -17,6 +18,7 @@ import { VaultFAB } from "@/features/vault/components/VaultFAB";
 import { VaultList } from "@/features/vault/components/VaultList";
 import { VaultSearchBar } from "@/features/vault/components/VaultSearchBar";
 import { VaultStats } from "@/features/vault/components/VaultStats";
+import { useVaultStore } from "@/features/vault/vault.store";
 
 import { useVaults } from "@/features/vault/hooks/useVaults";
 
@@ -29,7 +31,170 @@ export default function DashboardScreen() {
 
   const [search, setSearch] = useState("");
 
-  const { vaults, loading } = useVaults();
+  // const { vaults, loading } = useVaults();
+  const { vaults } =
+  useVaults();
+
+
+  const [selectedCategory, setSelectedCategory] =
+  useState("All");
+
+  const categories = [
+    "All",
+    ...Array.from(
+      new Set(
+        vaults.map(
+          (vault) => vault.category
+        )
+      )
+    ),
+  ];
+
+
+  
+
+  const fetchVaults =
+    useVaultStore(
+      (s) => s.fetchVaults
+    );
+
+  const loading =
+    useVaultStore(
+      (s) => s.loading
+    );
+
+  // const filteredVaults = vaults.filter(
+  //   (vault) =>
+  //     vault.title
+  //       .toLowerCase()
+  //       .includes(
+  //         search.toLowerCase()
+  //       ) ||
+
+  //     vault.category
+  //       .toLowerCase()
+  //       .includes(
+  //         search.toLowerCase()
+  //       ) ||
+
+  //     vault.username
+  //       ?.toLowerCase()
+  //       .includes(
+  //         search.toLowerCase()
+  //       ) ||
+
+  //     vault.email
+  //       ?.toLowerCase()
+  //       .includes(
+  //         search.toLowerCase()
+  //       )
+  // );
+
+  // const filteredVaults =
+  //   vaults.filter((vault) => {
+  //     const matchesSearch =
+  //       vault.title
+  //         .toLowerCase()
+  //         .includes(
+  //           search.toLowerCase()
+  //         ) ||
+
+  //       vault.category
+  //         .toLowerCase()
+  //         .includes(
+  //           search.toLowerCase()
+  //         ) ||
+
+  //       vault.username
+  //         ?.toLowerCase()
+  //         .includes(
+  //           search.toLowerCase()
+  //         ) ||
+
+  //       vault.email
+  //         ?.toLowerCase()
+  //         .includes(
+  //           search.toLowerCase()
+  //         );
+
+  //     const matchesCategory =
+  //       selectedCategory ===
+  //       "All"
+  //         ? true
+  //         : vault.category ===
+  //           selectedCategory;
+
+  //     return (
+  //       matchesSearch &&
+  //       matchesCategory
+  //     );
+  //   });
+    
+  const filteredVaults =
+    vaults.filter((vault) => {
+      const matchesSearch =
+        vault.title
+          .toLowerCase()
+          .includes(
+            search.toLowerCase()
+          ) ||
+
+        vault.category
+          .toLowerCase()
+          .includes(
+            search.toLowerCase()
+          ) ||
+
+        vault.username
+          ?.toLowerCase()
+          .includes(
+            search.toLowerCase()
+          ) ||
+
+        vault.email
+          ?.toLowerCase()
+          .includes(
+            search.toLowerCase()
+          );
+
+      const matchesCategory =
+        selectedCategory ===
+        "All"
+          ? true
+          : vault.category ===
+            selectedCategory;
+
+      return (
+        matchesSearch &&
+        matchesCategory
+      );
+    });
+
+  const totalVaults =
+    vaults.length;
+
+  const totalItems =
+    vaults.filter(
+      (v) =>
+        v.username ||
+        v.email ||
+        v.password ||
+        v.website ||
+        v.notes
+    ).length;
+
+  const categoryCount =
+    categories.length - 1;
+
+  const estimatedStorage =
+    `${Math.max(
+      1,
+      Math.round(
+        JSON.stringify(
+          vaults
+        ).length / 1024
+      )
+    )} KB`;
 
   return (
     <Screen>
@@ -38,10 +203,20 @@ export default function DashboardScreen() {
       >
 
       
+        {/* <ScrollView
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        > */}
         <ScrollView
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
-        >
+          refreshControl={
+            <RefreshControl
+              refreshing={loading}
+              onRefresh={fetchVaults}
+            />
+          }
+        >        
           {/* HEADER */}
 
           <View
@@ -75,10 +250,15 @@ export default function DashboardScreen() {
 
           {/* STATS */}
 
-          <VaultStats
+          {/* <VaultStats
             vaults={12}
             items={84}
             storage="128MB"
+          /> */}
+          <VaultStats
+            vaults={totalVaults}
+            items={categoryCount}
+            storage={estimatedStorage}
           />
 
           <View
@@ -94,7 +274,18 @@ export default function DashboardScreen() {
             Categories
           </Text>
 
-          <View
+          <Text
+            variant="muted"
+            style={{
+              marginTop: 4,
+            }}
+          >
+            Selected:
+            {" "}
+            {selectedCategory}
+          </Text>
+
+          {/* <View
             style={{
               flexDirection: "row",
               gap: theme.spacing.md,
@@ -130,7 +321,43 @@ export default function DashboardScreen() {
               title="Passwords"
               count={40}
             />
+          </View> */}
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              gap: theme.spacing.md,
+              marginTop:
+                theme.spacing.md,
+            }}
+          >
+            {categories.map(
+              (category) => {
+                const count =
+                  category === "All"
+                    ? vaults.length
+                    : vaults.filter(
+                        (v) =>
+                          v.category ===
+                          category
+                      ).length;
+
+                return (
+                  <VaultCategoryCard
+                    key={category}
+                    title={category}
+                    count={count}
+                    onPress={() =>
+                      setSelectedCategory(
+                        category
+                      )
+                    }
+                  />
+                );
+              }
+            )}
           </View>
+
 
           <View
             style={{
@@ -151,13 +378,38 @@ export default function DashboardScreen() {
                 theme.spacing.md,
             }}
           >
-            {loading ? (
+            {/* {loading ? (
               <Text variant="muted">
                 Loading vaults...
               </Text>
             ) : (
+              // <VaultList
+              //   vaults={vaults}
+              // />
+
               <VaultList
-                vaults={vaults}
+                vaults={filteredVaults}
+              />
+            )} */}
+
+            {loading ? (
+              <Text variant="muted">
+                Loading vaults...
+              </Text>
+            ) : filteredVaults.length === 0 ? (
+              <Text
+                variant="muted"
+                style={{
+                  textAlign: "center",
+                  marginTop:
+                    theme.spacing.lg,
+                }}
+              >
+                No vaults found
+              </Text>
+            ) : (
+              <VaultList
+                vaults={filteredVaults}
               />
             )}
           </View>
