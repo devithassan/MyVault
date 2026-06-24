@@ -1,3 +1,5 @@
+// src/features/vault/components/VaultCategoryCard.tsx
+
 import {
     Pressable,
     View,
