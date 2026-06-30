@@ -4,17 +4,16 @@ import {
   FastifyReply,
   FastifyRequest,
 } from "fastify";
-
+import { AuthUser } from "../types/auth.types";
 import jwt from "jsonwebtoken";
 
 declare module "fastify" {
   interface FastifyRequest {
-    user?: {
-      userId: string;
-      email?: string;
-    };
+    user?: AuthUser;
+   
   }
 }
+
 
 export async function authMiddleware(
   request: FastifyRequest,

@@ -1,29 +1,46 @@
 // // src/app/(tabs)/_layout.tsx
 
+import { Tabs } from "expo-router";
+import { Home, User } from "lucide-react-native";
+import { View } from "react-native";
 
 import Text from "@/components/ui/Text";
 import { useTheme } from "@/theme/useTheme";
-import { Tabs } from "expo-router";
-import { View } from "react-native";
 
-function TabIcon({
+function TabItem({
+  icon,
   label,
   focused,
 }: {
+  icon: React.ReactNode;
   label: string;
   focused: boolean;
 }) {
   const theme = useTheme();
 
   return (
-    <View style={{ alignItems: "center", justifyContent: "center" }}>
-      <Text
+    <View
+      style={{
+        alignItems: "center",
+        justifyContent: "center",
+        transform: [{ scale: focused ? 1.05 : 1 }],
+      }}
+    >
+      <View
         style={{
-          fontSize: 12,
+          marginBottom: 2,
+          opacity: focused ? 1 : 0.6,
+        }}
+      >
+        {icon}
+      </View>
+
+      <Text
+        variant="caption"
+        style={{
           color: focused
             ? theme.colors.primary
             : theme.colors.muted,
-          fontWeight: focused ? "600" : "400",
         }}
       >
         {label}
@@ -39,11 +56,18 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
+
+        tabBarShowLabel: false,
+
         tabBarStyle: {
           backgroundColor: theme.colors.background,
           borderTopColor: theme.colors.border,
-          height: 60,
+          borderTopWidth: 1,
+          height: 64,
+          paddingTop: 8,
+          paddingBottom: 8,
         },
+
         tabBarActiveTintColor: theme.colors.primary,
         tabBarInactiveTintColor: theme.colors.muted,
       }}
@@ -53,7 +77,20 @@ export default function TabLayout() {
         options={{
           title: "Vault",
           tabBarIcon: ({ focused }) => (
-            <TabIcon label="Vault" focused={focused} />
+            <TabItem
+              focused={focused}
+              label="Vault"
+              icon={
+                <Home
+                  size={20}
+                  color={
+                    focused
+                      ? theme.colors.primary
+                      : theme.colors.muted
+                  }
+                />
+              }
+            />
           ),
         }}
       />
@@ -63,7 +100,20 @@ export default function TabLayout() {
         options={{
           title: "Profile",
           tabBarIcon: ({ focused }) => (
-            <TabIcon label="Profile" focused={focused} />
+            <TabItem
+              focused={focused}
+              label="Profile"
+              icon={
+                <User
+                  size={20}
+                  color={
+                    focused
+                      ? theme.colors.primary
+                      : theme.colors.muted
+                  }
+                />
+              }
+            />
           ),
         }}
       />
@@ -71,16 +121,14 @@ export default function TabLayout() {
   );
 }
 
+
+
+
+// import Text from "@/components/ui/Text";
+// import { useTheme } from "@/theme/useTheme";
 // import { Tabs } from "expo-router";
 // import { View } from "react-native";
 
-// import { Text } from "@/components/ui/Text";
-// import { useTheme } from "@/theme/useTheme";
-
-// /**
-//  * Simple icon replacement (NO expo template dependency)
-//  * You can later upgrade to lucide/react-native or vector-icons
-//  */
 // function TabIcon({
 //   label,
 //   focused,
@@ -91,12 +139,7 @@ export default function TabLayout() {
 //   const theme = useTheme();
 
 //   return (
-//     <View
-//       style={{
-//         alignItems: "center",
-//         justifyContent: "center",
-//       }}
-//     >
+//     <View style={{ alignItems: "center", justifyContent: "center" }}>
 //       <Text
 //         style={{
 //           fontSize: 12,
@@ -119,36 +162,31 @@ export default function TabLayout() {
 //     <Tabs
 //       screenOptions={{
 //         headerShown: false,
-
+//         tabBarShowLabel: false,
 //         tabBarStyle: {
 //           backgroundColor: theme.colors.background,
 //           borderTopColor: theme.colors.border,
 //           height: 60,
-//           paddingBottom: 8,
-//           paddingTop: 8,
 //         },
-
 //         tabBarActiveTintColor: theme.colors.primary,
 //         tabBarInactiveTintColor: theme.colors.muted,
 //       }}
 //     >
-//       {/* DASHBOARD */}
 //       <Tabs.Screen
 //         name="index"
 //         options={{
 //           title: "Vault",
-//           tabBarLabel: ({ focused }) => (
+//           tabBarIcon: ({ focused }) => (
 //             <TabIcon label="Vault" focused={focused} />
 //           ),
 //         }}
 //       />
 
-//       {/* PROFILE */}
 //       <Tabs.Screen
 //         name="profile"
 //         options={{
 //           title: "Profile",
-//           tabBarLabel: ({ focused }) => (
+//           tabBarIcon: ({ focused }) => (
 //             <TabIcon label="Profile" focused={focused} />
 //           ),
 //         }}

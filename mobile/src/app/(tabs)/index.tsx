@@ -257,7 +257,7 @@ export default function DashboardScreen() {
           /> */}
           <VaultStats
             vaults={totalVaults}
-            items={categoryCount}
+            categories={categoryCount}
             storage={estimatedStorage}
           />
 

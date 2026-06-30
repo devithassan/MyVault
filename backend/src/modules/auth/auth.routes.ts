@@ -20,7 +20,9 @@ import {
   loginController,
 } from "./auth.controller";
 
-
+// import {
+//   refreshController,
+// } from "./auth.controller";
 
 async function authRoutes(app: FastifyInstance) {
 
@@ -54,7 +56,10 @@ async function authRoutes(app: FastifyInstance) {
     onboardingStatusController
   );
   
-
+  // app.post(
+  //   "/refresh",
+  //   refreshController
+  // );
 }
 
 export default authRoutes;
