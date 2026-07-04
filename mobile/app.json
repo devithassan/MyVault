@@ -1,32 +1,34 @@
 {
   "expo": {
-    "name": "mobile",
-    "slug": "mobile",
+    "name": "vault",
+    "slug": "vault",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/images/icon.png",
-    "scheme": "mobile",
+    "scheme": "vault",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
     },
     "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./src/assets/images/android-icon-foreground.png",
-        "backgroundImage": "./src/assets/images/android-icon-background.png",
-        "monochromeImage": "./src/assets/images/android-icon-monochrome.png"
-      },
+      "package": "com.devithassan.vault",
+      "versionCode": 1,
+      "minSdkVersion": 24,
+      "targetSdkVersion": 35,
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "permissions": [
         "android.permission.RECORD_AUDIO",
-        "android.permission.MODIFY_AUDIO_SETTINGS",
-        "android.permission.RECORD_AUDIO",
         "android.permission.MODIFY_AUDIO_SETTINGS"
       ],
-      "package": "com.anonymous.mobile"
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./src/assets/images/android-icon-foreground.png",
+        "backgroundImage": "./src/assets/images/android-icon-background.png",
+        "monochromeImage": "./src/assets/images/android-icon-monochrome.png"      
+      }     
+      
     },
     "web": {
       "output": "static",
@@ -54,6 +56,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "4c88fad3-e792-41de-a929-96cdfc1ff295"
+      }
+    },
+    "owner": "devithassan"
   }
 }
