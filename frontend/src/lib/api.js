@@ -1,8 +1,14 @@
 import axios from "axios";
 
-//deployment api
+
+// deployment api
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: false,
+  timeout: 30000,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 
