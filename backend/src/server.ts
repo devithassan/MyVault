@@ -9,11 +9,11 @@ const PORT = Number(process.env.PORT) || 5000;
 async function startServer() {
   try {
     await connectDB();
-    await sendEmail(
-      "tahiriqbaloffcl@gmail.com",
-      "Backend Test",
-      "<h1>Email system works</h1>"
-    );
+    // await sendEmail(
+    //   "tahiriqbaloffcl@gmail.com",
+    //   "Backend Test",
+    //   "<h1>Email system works</h1>"
+    // );
 
     await app.listen({
       port: PORT,
