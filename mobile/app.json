@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "vault",
-    "slug": "vault",
+    "name": "Vault",
+    "slug": "Vault",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/images/icon.png",
-    "scheme": "vault",
+    "scheme": "Vault",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
