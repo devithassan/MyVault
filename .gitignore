@@ -17,3 +17,8 @@ build
 
 uploads/
 backend/uploads/
+
+credentials/
+credentials.json
+
+mobile/expo-env.d.ts
